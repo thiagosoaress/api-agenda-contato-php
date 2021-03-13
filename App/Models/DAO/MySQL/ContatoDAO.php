@@ -11,12 +11,13 @@ class ContatoDAO
     {
         try {
 
-            $sql = "INSERT INTO contato (nome, numero) VALUES (:nome, :numero)";
+            $sql = "INSERT INTO contato (nome, numero, fk_codigo_area) VALUES (:nome, :numero, :fk_codigo_area)";
             $conn = Conexao::getConexao();
 
             $stmt = $conn->prepare($sql);
             $stmt->bindValue(':nome', $contato->getNome());
             $stmt->bindValue(':numero', $contato->getNumero());
+            $stmt->bindValue(':fk_codigo_area', $contato->getFkCodigoArea());
 
             $result = $stmt->execute();
 
@@ -29,12 +30,6 @@ class ContatoDAO
         } catch (\Exception $e) {
 
             return $e;
-            
-            return array([
-                'message' => $e->getMessage(),
-                'code' => $e->getCode(),
-                'result' => $result
-            ]);
         }
     }
 
@@ -47,16 +42,29 @@ class ContatoDAO
         return $result;
     }
 
-    public function updateContato(ContatoModel $contato): bool
+    public function updateContato(ContatoModel $contato)
     {
-        $sql = "UPDATE contato SET nome = :nome WHERE id = :id";
-        $conn = Conexao::getConexao();
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':nome', $contato->getNome());
-        $stmt->bindValue(':id', $contato->getId());
+        try {
 
-        $result = $stmt->execute();
-        return $result;
+            $sql = "UPDATE contato SET nome = :nome, numero = :numero WHERE id = :id";
+            $conn = Conexao::getConexao();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':nome', $contato->getNome());
+            $stmt->bindValue(':numero', $contato->getNumero());
+            $stmt->bindValue(':id', $contato->getId());
+
+            $result = $stmt->execute();
+
+            if (!$result) {
+                throw new \Exception('Erro na inserção do registro');
+            }
+
+            return $result;
+
+        } catch (\Exception $e) {
+
+            return $e;
+        }
     }
 
     public function deleteContato($id)

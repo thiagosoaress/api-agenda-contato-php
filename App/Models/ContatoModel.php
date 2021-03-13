@@ -6,6 +6,7 @@ class ContatoModel
 {
     private $id;
     private $nome;
+    private $fk_codigo_area;
     private $numero;
 
     public function getId(): int
@@ -30,6 +31,17 @@ class ContatoModel
         return $this;
     }
 
+    public function getFkCodigoArea(): int
+    {
+        return $this->fk_codigo_area;
+    }
+
+    public function setFkCodigoArea(int $fk_codigo_area): ContatoModel
+    {
+        $this->fk_codigo_area = $fk_codigo_area;
+        return $this;
+    }
+
     public function getNumero(): string
     {
         return $this->numero;
@@ -40,4 +52,5 @@ class ContatoModel
         $this->numero = $numero;
         return $this;
     }
+
 }
