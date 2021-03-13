@@ -46,11 +46,12 @@ class ContatoDAO
     {
         try {
 
-            $sql = "UPDATE contato SET nome = :nome, numero = :numero WHERE id = :id";
+            $sql = "UPDATE contato SET nome = :nome, numero = :numero, fk_codigo_area = :fk_codigo_area WHERE id = :id";
             $conn = Conexao::getConexao();
             $stmt = $conn->prepare($sql);
             $stmt->bindValue(':nome', $contato->getNome());
             $stmt->bindValue(':numero', $contato->getNumero());
+            $stmt->bindValue(':fk_codigo_area', $contato->getFkCodigoArea());
             $stmt->bindValue(':id', $contato->getId());
 
             $result = $stmt->execute();

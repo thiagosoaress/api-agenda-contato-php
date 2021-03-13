@@ -73,13 +73,14 @@ class ContatoController
 
             $data = $request->getParsedBody();
 
-            if (array_key_exists('id', $data) && array_key_exists('nome', $data) && array_key_exists('numero', $data) && count($data) == 3) {
+            if (array_key_exists('id', $data) && array_key_exists('nome', $data) && array_key_exists('codigo_area', $data) && array_key_exists('numero', $data) && count($data) == 4) {
 
-                if ((!empty($data['id'])) && (!empty($data['nome'])) && (!empty($data['numero']))) {
+                if ((!empty($data['id'])) && (!empty($data['nome'])) && (!empty($data['codigo_area'])) && (!empty($data['numero']))) {
 
                     $contatoModel = new ContatoModel();
                     $contatoModel->setId($data['id']);
                     $contatoModel->setNome($data['nome']);
+                    $contatoModel->setFkCodigoArea($data['codigo_area']);
                     $contatoModel->setNumero($data['numero']);
 
                     $contatoDao = new ContatoDAO();
