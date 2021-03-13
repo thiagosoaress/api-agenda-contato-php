@@ -28,7 +28,7 @@ class ContatoDAO
         return $result;
     }
 
-    public function updateContato(ContatoModel $contato)
+    public function updateContato(ContatoModel $contato): bool
     {
         $sql = "UPDATE contato SET nome = :nome WHERE id = :id";
         $conn = Conexao::getConexao();
