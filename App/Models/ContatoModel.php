@@ -6,6 +6,7 @@ class ContatoModel
 {
     private $id;
     private $nome;
+    private $numero;
 
     public function getId(): int
     {
@@ -26,6 +27,17 @@ class ContatoModel
     public function setNome(string $nome): ContatoModel
     {
         $this->nome = $nome;
+        return $this;
+    }
+
+    public function getNumero(): string
+    {
+        return $this->numero;
+    }
+
+    public function setNumero(string $numero): ContatoModel
+    {
+        $this->numero = $numero;
         return $this;
     }
 }

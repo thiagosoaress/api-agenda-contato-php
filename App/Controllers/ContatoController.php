@@ -3,9 +3,9 @@
 namespace App\Controllers;
 
 use App\Models\ContatoModel;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
 use App\Models\DAO\MySQL\ContatoDAO;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 
 class ContatoController
 {
@@ -16,18 +16,23 @@ class ContatoController
 
             $data = $request->getParsedBody();
 
-            if (array_key_exists('nome', $data) && count($data) == 1) {
+            if (array_key_exists('nome', $data) && array_key_exists('numero', $data) && count($data) == 2) {
 
-                if (isset($data['nome']) && !empty($data['nome'])) {
+                if (!empty($data['nome']) && !empty($data['numero'])) {
 
                     $contato = new ContatoModel();
                     $contato->setNome($data['nome']);
+                    $contato->setNumero($data['numero']);
 
                     $contatoDao = new ContatoDAO;
                     $result = $contatoDao->insertContato($contato);
 
+                    if (is_a($result, 'Exception')) {
+                        throw new \Exception($result->getMessage(), 502);
+                    }
+
                     $response = $response->withJson([
-                        'id' => $result,
+                        'result' => $result,
                         'data' => $data
                     ], 201);
 
@@ -38,7 +43,7 @@ class ContatoController
                 }
             } else {
 
-                throw new \Exception('Apenas o parâmetro nome é aceito', 400);
+                throw new \Exception('Apenas o parâmetro nome e numro são aceitos', 400);
             }
         } catch (\Exception $e) {
 
@@ -60,7 +65,7 @@ class ContatoController
         return $response;
     }
 
-    public function updateContato(Request $request, Response $response)
+    public function updateContato(Request $request, Response $response): Response
     {
         try {
 
@@ -100,5 +105,10 @@ class ContatoController
 
             return $response;
         }
+    }
+
+    public function deleteContato(int $id)
+    {
+
     }
 }

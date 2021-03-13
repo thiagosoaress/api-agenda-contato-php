@@ -7,16 +7,35 @@ use App\Models\ContatoModel;
 
 class ContatoDAO
 {
-    public function insertContato(ContatoModel $contato): int
+    public function insertContato(ContatoModel $contato)
     {
-        $sql = "INSERT INTO contato (nome) VALUES (:nome)";
-        $conn = Conexao::getConexao();
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':nome', $contato->getNome());
+        try {
 
-        $stmt->execute();
+            $sql = "INSERT INTO contato (nome, numero) VALUES (:nome, :numero)";
+            $conn = Conexao::getConexao();
 
-        return $conn->lastInsertId();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':nome', $contato->getNome());
+            $stmt->bindValue(':numero', $contato->getNumero());
+
+            $result = $stmt->execute();
+
+            if (!$result) {
+                throw new \Exception('Erro na inserção do registro');
+            }
+
+            return $conn->lastInsertId();
+
+        } catch (\Exception $e) {
+
+            return $e;
+            
+            return array([
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'result' => $result
+            ]);
+        }
     }
 
     public function getContatos(): array
