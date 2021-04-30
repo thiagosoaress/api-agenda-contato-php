@@ -115,8 +115,33 @@ class ContatoController
         }
     }
 
-    public function deleteContato(int $id)
+    public function deleteContato(Request $request, Response $response)
     {
+        try {
+
+            $data = $request->getParsedBody();
+
+            if (array_key_exists('id', $data)) {
+
+                if (!empty($data['id'])) {
+
+                    $contatoDao = new ContatoDAO();
+                    $contatoDao->deleteContato($data['id']);
+
+                }
+
+            }
+
+        } catch(\Exception $e) {
+
+            $response = $response->withJson([
+                'message' => $e->getMessage(),
+                'code' => $e->getCode(),
+                'data' => $data
+            ]);
+
+            return $response;
+        }
 
     }
 }

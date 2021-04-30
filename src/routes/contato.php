@@ -9,6 +9,7 @@ $app->group('/api/v1', function () {
     $this->post('/contato', ContatoController::class . ':insertContato');
     $this->get('/contato', ContatoController::class . ':getContatos');
     $this->put('/contato', ContatoController::class . ':updateContato');
+    $this->delete('/contato', ContatoController::class . ':deleteContato');
 
 });
 
